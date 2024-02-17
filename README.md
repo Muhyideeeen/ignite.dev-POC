@@ -1,73 +1,83 @@
-# ignite.dev-POC Deployment Guide
+# Deploying kube-prometheus-stack with Terraform and Helm
 
-This guide provides step-by-step instructions on deploying the ignite.dev-POC repository.
+This guide provides step-by-step instructions on deploying kube-prometheus-stack to your Kubernetes cluster using Terraform and Helm.
 
 ## Prerequisites
 
-Before proceeding with the deployment, ensure you have the following prerequisites:
+Before you begin, make sure you have the following prerequisites installed on your machine:
 
-1. **Git**: Install Git on your local machine. You can download it from [git-scm.com](https://git-scm.com/).
+- [Terraform](https://www.terraform.io/downloads.html)
+- [Helm](https://helm.sh/docs/intro/install/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- Docker (if you want to containerize and deploy your Node.js app)
 
-2. **GitHub Account**: Create a GitHub account if you don't have one. You can sign up at [github.com](https://github.com/).
-
-3. **Access to the Repository**: Ensure that you have access to the `ignite.dev-POC` repository on GitHub.
-
-## Deployment Steps
-
-Follow these steps to deploy the ignite.dev-POC repository:
-
-### 1. Clone the Repository
-
-Open a terminal on your local machine and run the following command to clone the repository:
+## Clone the Repository
 
 ```bash
-git clone https://github.com/Muhyideeeen/ignite.dev-POC.git
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
 ```
 
-### 2. Navigate to the Repository
+## Set Up kubeconfig
 
-Change your working directory to the cloned repository:
+Ensure that your `kubeconfig` file is in the correct directory. If needed, update the `kubeconfig_path` variable in `prometheus.tf`:
+
+```hcl
+variable "kubeconfig_path" {
+  description = "Path to the kubeconfig file"
+  default     = "../../kubeconfig"  # Update this with the correct path if needed
+}
+```
+
+## Customize Helm Values
+
+Edit the `values.yaml` file to customize Helm values for kube-prometheus-stack deployment:
+
+```yaml
+# values.yaml
+
+alertmanager:
+  replicas: 1
+
+grafana:
+  enabled: true
+```
+
+## Deploy kube-prometheus-stack
 
 ```bash
-cd ignite.dev-POC
+terraform init
+terraform apply
 ```
 
-### 3. Add Files and Commit Changes
+## Access Grafana
 
-Add the necessary files to the repository and stage them for commit. Replace `your_file.txt` with the actual file names.
+Retrieve the Grafana admin password:
 
 ```bash
-git add your_file.txt
+kubectl get secret --namespace monitoring kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
-Commit the changes:
+Access Grafana using the service IP and port:
 
 ```bash
-git commit -m "Add your_file.txt"
+kubectl get svc --namespace monitoring kube-prometheus-stack-grafana
 ```
 
-### 4. Set Upstream Branch
+Open Grafana in your browser and log in using the admin password.
 
-Set the upstream branch to match the remote repository's default branch (main):
+## Clean Up (Optional)
+
+If needed, you can remove the kube-prometheus-stack deployment:
 
 ```bash
-git push -u origin main
+terraform destroy
 ```
 
-### 5. Verify on GitHub
+Confirm with "yes" when prompted.
 
-Visit your GitHub repository on the web and ensure that the changes are reflected.
-
-### 6. Deployment Complete
-
-Congratulations! You have successfully deployed the ignite.dev-POC repository. Your changes are now available on GitHub.
-
-## Notes
-
-- Ensure that you have the necessary permissions to push changes to the repository.
-- Double-check your GitHub repository settings to confirm the default branch is set to `main`.
-
-Feel free to customize this guide further based on specific details or additional steps required for your deployment.
 ```
 
-Copy and paste this content into a file named `README.md` in your repository's root directory. This will serve as the main documentation for your project on GitHub.
+Remember to replace placeholders like `your-username`, `your-repo`, and adjust the paths accordingly based on your specific project structure.
+
+Feel free to add more details or customize the guide based on your project's requirements. If you have additional components or configurations, include them in the guide for comprehensive instructions.

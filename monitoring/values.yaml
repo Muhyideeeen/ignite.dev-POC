@@ -6,4 +6,7 @@ kubelet:
 
 grafana:
   enabled: true
-  adminPassword: Alpha12Tango$
+  adminPassword: ""
+  service:
+    type: ClusterIP
+    port: 3000 

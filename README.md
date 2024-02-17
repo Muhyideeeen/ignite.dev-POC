@@ -1,5 +1,3 @@
-Certainly! Below is the content formatted as a `README.md` file:
-
 ```markdown
 # ignite.dev-POC Deployment Guide
 

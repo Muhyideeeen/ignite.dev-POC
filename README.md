@@ -1,6 +1,3 @@
-Apologies for the oversight. Let's include more detailed instructions on how to access Grafana in the updated guide:
-
-
 # Deploying Node.js Express App and Monitoring in Kubernetes Cluster
 
 This guide provides step-by-step instructions on deploying a Node.js Express app to a Kubernetes cluster and setting up monitoring using kube-prometheus-stack.
@@ -18,8 +15,8 @@ Before you begin, make sure you have the following prerequisites installed on yo
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone https://github.com/Muhyideeeen/ignite.dev-POC
+cd ignite.dev-POC
 ```
 
 ## Deploy Node.js Express App to Kubernetes Cluster
@@ -67,7 +64,26 @@ variable "kubeconfig_path" {
 }
 ```
 
-3. Deploy kube-prometheus-stack for monitoring:
+3. Update the `values.yaml` file to set the Grafana admin password as an empty string and define the Grafana service port. By default the port 
+
+```yaml
+# values.yaml
+
+prometheus-operator:
+  createCustomResource: false
+
+kubelet:
+  monitorWithoutCredentials: true
+
+grafana:
+  enabled: true
+  adminPassword: ""
+  service:
+    type: ClusterIP
+    port: 3000  # Set the desired port
+```
+
+4. Deploy kube-prometheus-stack for monitoring:
 
 ```bash
 terraform init
@@ -99,3 +115,4 @@ http://<grafana-service-IP>:<grafana-service-port>
 Log in to Grafana using the admin password.
 
 These steps should guide you through deploying the Node.js Express app, setting up monitoring with kube-prometheus-stack, and accessing both the deployed app and Grafana for monitoring. Adjust paths and values based on your specific project structure and configurations.
+```

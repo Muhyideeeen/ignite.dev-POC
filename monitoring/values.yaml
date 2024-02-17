@@ -1,0 +1,9 @@
+prometheus-operator:
+  createCustomResource: false
+
+kubelet:
+  monitorWithoutCredentials: true
+
+grafana:
+  enabled: true
+  adminPassword: Alpha12Tango$

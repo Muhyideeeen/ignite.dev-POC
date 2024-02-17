@@ -1,4 +1,3 @@
-```markdown
 # ignite.dev-POC Deployment Guide
 
 This guide provides step-by-step instructions on deploying the ignite.dev-POC repository.
